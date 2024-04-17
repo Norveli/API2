@@ -1,8 +1,7 @@
 const User = require ('../models/User')
 const jwt = require('jsonwebtoken')
 const Recipe = require('../models/Recipe')
-const authRoutes = require('../routes/authRoutes')
-const {requireAuth} = require ('../middleware/authMiddleware');
+
 
 const maxAge = 3 * 24 * 60 * 60
 const createToken = (id) => {
@@ -66,17 +65,6 @@ module.exports.login_post = async (req,res) => {
     } 
 }
 
-module.exports.show_recipes = requireAuth, async (req,res) => {
-    try {
-        const recipes = await Recipe.find(); 
-        res.render('recipes', { recipes: recipes }); 
-    } catch (error) {
-        res.status(500).render('error', { error: error });
-    }
-}
-
-
-
 module.exports.new_recipe_get = async (req, res) => {
     res.render('new-recipe'); 
 }
@@ -86,53 +74,50 @@ module.exports.new_recipe_post = async (req, res) => {
     
     const { name, ingredients, instructions } = req.body;
     try {
+        
         const recipe = await Recipe.create({ name, ingredients, instructions});
-        res.status(201).json({ recipe: recipe._id });
-    } catch (err) {
+        res.status(201).json({ recipe: recipe._id })
+    }
+    
+    catch (err) {
         const errors = handleErrors(err);
         res.status(400).json({ errors });
     }
 };
 
-
-module.exports.edit_recipe_get = async (req, res) => {
+module.exports.show_recipes =  async (req,res) => {
     try {
-        const recipe = await Recipe.findById(req.params.id);
-        if (!recipe) {
-            return res.status(404).send('Recipe not found');
-        }
-        res.render('editRecipe', { recipe: recipe });
+        const recipes = await Recipe.find(); 
+        res.render('recipes', { recipes: recipes }); 
     } catch (error) {
-        res.status(500).send(error.toString());
+        res.status(500).render('error', { error: error });
     }
 }
 
-module.exports.edit_recipe_post = async (req, res) => {
-    try {
-        const { name, ingredients, instructions } = req.body;
-        const updatedRecipe = await Recipe.findByIdAndUpdate(req.params.id, {
-            name,
-            ingredients: ingredients.split(',').map(ingredient => ingredient.trim()), 
-            instructions
-        }, { new: true });
-
-        res.redirect('/recipes/' + updatedRecipe._id);
-    } catch (error) {
-        res.status(500).send(error.toString());
+module.exports.select_recipe =  async (req,res) => {
+    {
+        try {
+            const recipe = await Recipe.findById(req.params.id); 
+            if (!recipe) {
+                return res.status(404).send('Recipe not found');
+            }
+            res.render('recipeDetail', { recipe: recipe }); 
+        } catch (error) {
+            res.status(500).render('error', { error: error });
+        }
     }
 }
 
-module.exports.delete_recipe_post = async (req, res) => {
+module.exports.delete_recipe = async (req, res) => {
     try {
-        const recipe = await Recipe.findOneAndDelete({ _id: req.params.id, creator: req.user._id });
-        if (!recipe) {
-            return res.status(404).json({ error: 'Recipe not found or user unauthorized' });
-        }
-        res.redirect('/recipes');
+        await Recipe.findByIdAndDelete(req.params.id);
+        console.log('Recipe deleted successfully');
+        res.json({ success: true, message: 'Recipe deleted successfully!' });
     } catch (error) {
-        res.status(500).send(error);
+        console.error('Failed to delete the recipe:', error);
+        res.status(500).json({ success: false, message: 'Failed to delete the recipe.' });
     }
-};
+}
 
 module.exports.logout_get = async (req, res) => {
     res.cookie('jwt','', {maxAge:1})

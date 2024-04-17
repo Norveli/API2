@@ -179,3 +179,7 @@ footer{
 .editForm {
   height: 720px;
 }
+
+#delete {
+  cursor: pointer;
+}

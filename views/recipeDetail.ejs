@@ -4,9 +4,15 @@
 
 <div class="headings">
     <ul class="options">
-        <a class="btn" href="/recipeDetail/<%= recipe._id %>/editRecipe">Edit recipe</a>
-        <a class="btn" onclick="confirmDeletion('<%= recipe._id %>')">Delete recipe</a>
-        <a href="/recipes">Go back</a>
+
+        <% if(user) { %>
+            <a class="btn" href="/recipeDetail/<%= recipe._id %>/editRecipe">Edit recipe</a>
+            <a class="btn" id="delete" onclick="confirmDeletion('<%= recipe._id %>')">Delete recipe</a>
+            <a href="/recipes">Go back</a>
+            <% } else { %>
+            <a href="/recipes">Go back</a>
+            <% } %>
+
     <ul>
     <img src="/recipe.png" alt="<%= recipe.name %> recipe icon" style="max-width: 300px;">  
 </div>
@@ -14,10 +20,6 @@
     <h2 class="detail-h2"><%= recipe.name %></h2>
     <h3>Ingredients</h3>
     <p><%= recipe.ingredients.join(", ") %></p>
-    
-
-
-
 </div>
 <div class="instructions">
     <h3>Instructions</h3>

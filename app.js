@@ -2,9 +2,9 @@ const express = require('express');
 const mongoose = require('mongoose');
 const authRoutes = require('./routes/authRoutes')
 const cookieParser = require ('cookie-parser')
-const {requireAuth, checkUser} = require ('./middleware/authMiddleware');
+const {checkUser} = require ('./middleware/authMiddleware');
 const Recipe = require('./models/Recipe');
-const User = require('./models/User');
+
 
 
 const app = express();
@@ -34,29 +34,8 @@ app.use(authRoutes)
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
-app.get('/recipes',  requireAuth, async (req, res) => {
-    try {
-        const recipes = await Recipe.find(); 
-        res.render('recipes', { recipes: recipes }); 
-    } catch (error) {
-        res.status(500).render('error', { error: error });
-    }
-})
 
-
-app.get('/recipes/:id', async (req, res) => {
-    try {
-        const recipe = await Recipe.findById(req.params.id); 
-        if (!recipe) {
-            return res.status(404).send('Recipe not found');
-        }
-        res.render('recipeDetail', { recipe: recipe }); 
-    } catch (error) {
-        res.status(500).render('error', { error: error });
-    }
-})
-
-app.get('/recipeDetail/:id/editRecipe', requireAuth, async (req, res) => {
+app.get('/recipeDetail/:id/editRecipe',  async (req, res) => {
     try {
         const recipe = await Recipe.findById(req.params.id);
         if (!recipe) {
@@ -84,16 +63,7 @@ app.post('/recipes/:id/edit', async (req, res) => {
     }
 });
 
-app.delete('/recipes/:id/delete', requireAuth, async (req, res) => {
-    try {
-        await Recipe.findByIdAndDelete(req.params.id);
-        console.log('Recipe deleted successfully');
-        res.json({ success: true, message: 'Recipe deleted successfully!' });
-    } catch (error) {
-        console.error('Failed to delete the recipe:', error);
-        res.status(500).json({ success: false, message: 'Failed to delete the recipe.' });
-    }
-});
+
 
 
 

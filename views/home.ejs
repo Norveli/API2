@@ -1,0 +1,21 @@
+<%- include('partials/header'); -%>
+
+<header>
+  <div class="recipe">
+    <img src="/recipe.png" alt="" style="max-width: 300px;">
+  </div>
+  <div class="headings">
+    <h2>All kinds of Recipes!</h2>
+    <h3>Embrace your gluttony!</h3>
+    <% if(user) { %>
+    <a href="/recipes" class="btn">View Recipes</a>
+    <a href="/recipes/new" class="btn">Create Recipe</a>
+    <% } else { %>
+    <a href="/recipes" class="btn">View Recipes</a>
+    <% } %>
+  </div>
+</header>
+
+
+
+<%- include('partials/footer'); -%>

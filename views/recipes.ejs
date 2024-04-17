@@ -1,0 +1,18 @@
+<%- include('partials/header'); -%>
+
+<ul class="recipes">
+    <% recipes.forEach(recipe => { %>
+        <a href="/recipes/<%= recipe._id %>" class="recipe">
+            <img src="/recipe.png" alt="<%= recipe.name %> recipe icon">
+            <h4><%= recipe.name %></h4>
+            <p><%= recipe.ingredients %></p> 
+        </a>
+    <% }); %>
+</ul>
+
+
+<%- include('partials/footer'); -%>
+
+
+
+

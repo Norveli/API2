@@ -1,0 +1,60 @@
+<%- include('partials/header'); -%>
+
+<header>
+
+<div class="headings">
+    <ul class="options">
+        <a class="btn" href="/recipeDetail/<%= recipe._id %>/editRecipe">Edit recipe</a>
+        <a class="btn" onclick="confirmDeletion('<%= recipe._id %>')">Delete recipe</a>
+        <a href="/recipes">Go back</a>
+    <ul>
+    <img src="/recipe.png" alt="<%= recipe.name %> recipe icon" style="max-width: 300px;">  
+</div>
+<div>
+    <h2 class="detail-h2"><%= recipe.name %></h2>
+    <h3>Ingredients</h3>
+    <p><%= recipe.ingredients.join(", ") %></p>
+    
+
+
+
+</div>
+<div class="instructions">
+    <h3>Instructions</h3>
+    <p><%= recipe.instructions %></p>
+</div>
+</header>
+
+<script>
+
+    function confirmDeletion(recipeId) {
+        if (confirm("Are you sure you want to delete this recipe?")) {
+            fetch('/recipes/' + recipeId + '/delete', {
+    method: 'DELETE'
+})
+.then(response => {
+    console.log(response.headers.get('Content-Type')); 
+    if (response.headers.get('Content-Type').includes('application/json')) {
+        return response.json();
+    } else {
+        throw new Error('Non-JSON response received');
+    }
+})
+.then(data => {
+    alert(data.message); 
+    if(data.success) {
+        window.location.href = '/recipes'; 
+    }
+})
+.catch(error => {
+    console.error('Error:', error);
+    alert('Failed to delete the recipe.'); 
+});
+
+        }
+    }
+
+   
+    </script>
+
+<%- include('partials/footer'); -%>

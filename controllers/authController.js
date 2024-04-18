@@ -87,10 +87,10 @@ module.exports.new_recipe_post = async (req, res) => {
 
 module.exports.show_recipes =  async (req,res) => {
     try {
-        const recipes = await Recipe.find(); 
-        res.render('recipes', { recipes: recipes }); 
+        const recipes = await Recipe.find()
+        res.render('recipes', { recipes: recipes })
     } catch (error) {
-        res.status(500).render('error', { error: error });
+        res.status(500).render('error', { error: error })
     }
 }
 
@@ -99,23 +99,23 @@ module.exports.select_recipe =  async (req,res) => {
         try {
             const recipe = await Recipe.findById(req.params.id); 
             if (!recipe) {
-                return res.status(404).send('Recipe not found');
+                return res.status(404).send('Recipe not found')
             }
-            res.render('recipeDetail', { recipe: recipe }); 
+            res.render('recipeDetail', { recipe: recipe })
         } catch (error) {
-            res.status(500).render('error', { error: error });
+            res.status(500).render('error', { error: error })
         }
     }
 }
 
 module.exports.delete_recipe = async (req, res) => {
     try {
-        await Recipe.findByIdAndDelete(req.params.id);
-        console.log('Recipe deleted successfully');
-        res.json({ success: true, message: 'Recipe deleted successfully!' });
+        await Recipe.findByIdAndDelete(req.params.id)
+        console.log('Recipe deleted successfully')
+        res.json({ success: true, message: 'Recipe deleted successfully!' })
     } catch (error) {
-        console.error('Failed to delete the recipe:', error);
-        res.status(500).json({ success: false, message: 'Failed to delete the recipe.' });
+        console.error('Failed to delete the recipe:', error)
+        res.status(500).json({ success: false, message: 'Failed to delete the recipe.' })
     }
 }
 

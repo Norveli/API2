@@ -3,7 +3,7 @@ const {isEmail} = require ('validator')
 const bcrypt = require ('bcrypt')
 
 const passwordComplexity = function(value) {
-    return /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).*$/.test(value);
+    return /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).*$/.test(value)
 }
 const userSchema = new mongoose.Schema({
     username:{

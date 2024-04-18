@@ -1,4 +1,4 @@
-<%- include('partials/header'); -%>
+<%- include('partials/header') -%>
 
 <body>
     <h1>Add a New Recipe</h1>
@@ -16,23 +16,23 @@
     </form>
 
     <script>
-            const form = document.querySelector('form');
-            const nameError = document.querySelector('.name.error');
-            const ingredientsError = document.querySelector('.ingredients.error');
-            const instructionsError = document.querySelector('.instructions.error');
+            const form = document.querySelector('form')
+            const nameError = document.querySelector('.name.error')
+            const ingredientsError = document.querySelector('.ingredients.error')
+            const instructionsError = document.querySelector('.instructions.error')
 
             form.addEventListener('submit', async (e) => {
-                e.preventDefault();
+                e.preventDefault()
 
                 // Clear previous errors
-                nameError.textContent = '';
-                ingredientsError.textContent = '';
-                instructionsError.textContent = '';
+                nameError.textContent = ''
+                ingredientsError.textContent = ''
+                instructionsError.textContent = ''
 
 
-                const name = form.name.value;
-                const ingredients = form.ingredients.value;
-                const instructions = form.instructions.value;
+                const name = form.name.value
+                const ingredients = form.ingredients.value
+                const instructions = form.instructions.value
 
                 try {
                     const res = await fetch('/recipes', {
@@ -40,25 +40,25 @@
                         body: JSON.stringify({ name, ingredients, instructions }),
                         headers: { 'Content-Type': 'application/json' }
 
-});;
+})
 
-                    const data = await res.json();
+                    const data = await res.json()
 
                     if (data.errors) {
-                        if (nameError && data.errors.name) nameError.textContent = data.errors.name;
-                        if (ingredientsError && data.errors.ingredients) ingredientsError.textContent = data.errors.ingredients;
-                        if (instructionsError && data.errors.instructions) instructionsError.textContent = data.errors.instructions;
+                        if (nameError && data.errors.name) nameError.textContent = data.errors.name
+                        if (ingredientsError && data.errors.ingredients) ingredientsError.textContent = data.errors.ingredients
+                        if (instructionsError && data.errors.instructions) instructionsError.textContent = data.errors.instructions
                     }
 
                     if (data.recipe) {
-                        location.assign('/');
+                        location.assign('/')
                     }
                 } catch (err) {
-                    console.error('An error occurred:', err);
+                    console.error('An error occurred:', err)
                 }
-            });
-        ;
+            })
+        
     </script>
 </body>
 
-<%- include('partials/footer'); -%>
+<%- include('partials/footer') -%>

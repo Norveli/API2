@@ -1,4 +1,4 @@
-<%- include('partials/header'); -%>
+<%- include('partials/header') -%>
 
 <ul class="recipes">
     <% recipes.forEach(recipe => { %>
@@ -7,11 +7,11 @@
             <h4><%= recipe.name %></h4>
             <p><%= recipe.ingredients %></p> 
         </a>
-    <% }); %>
+    <% }) %>
 </ul>
 
 
-<%- include('partials/footer'); -%>
+<%- include('partials/footer') -%>
 
 
 
